@@ -93,16 +93,31 @@ ROOT-PROJECT NAME
 ディレクトリ構成
 ===================
 
-"https://github.com/miyakz1192/dl_image_manager.git"のそれ。
+"https://github.com/miyakz1192/dl_image_manager.git"のそれ。::
 
-ROOT-
-  projects
-    common
-    project_name
-      master
-        image.
+  dl_image_manager(root)
+    doc
+    lib
+    bin
+    projects
+      <project_name>
+        README.md
+        master
+          image.jpg (data)
+          image.xml (annotation)
+        build
+          <x>.jpg
+          <x>.xml
+        data_augmentation 
+          daug.py
+          <xxx.py>
+        jupyer_notebook
+          <~.ipynb>
+  
 
-
+"<>"でくくららた所が可変部分。
+ここで、<project_name>には具体的なプロジェクト名が入る。README.mdは任意。
+build配下のxは0以上の正の整数。
 
 
 着目点

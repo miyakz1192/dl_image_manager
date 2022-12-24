@@ -7,12 +7,13 @@ from tensorflow.keras.utils import array_to_img
 
 class DataAugmentationGenerator:
     #if this is not in GUI environment show_image set to False
-    def __init__(self, image_file_path, base_img_size=(400,400), base_img_color=255, save_dir = "./", show_image=True):
+    def __init__(self, image_file_path, base_img_size=(400,400), base_img_color=255, save_dir = "./", show_image=True, save_file_prefix=""):
         self.reest_count()
         self.base_img_size = base_img_size
         self.base_img_color = base_img_color
         self.save_dir = save_dir 
         self.show_image = show_image
+        self.save_file_prefix = save_file_prefix
 
         #アップロードされた画像を読み込み
         self.image = image.load_img(image_file_path) #表示用のイメージデータ
@@ -105,7 +106,7 @@ class DataAugmentationGenerator:
           ty = data[0].shape[1]
           base[0:tx,0:ty] = data[0][0:tx,0:ty]
           save_img = array_to_img(base, scale = False)
-          image.save_img(self.save_dir + "/" + str(self.count) + ".jpg", save_img)
+          image.save_img(self.save_dir + "/" + self.save_file_prefix + "_" + str(self.count) + ".jpg", save_img)
           self.count += 1
         
           #6回目で繰り返しを強制的に終了

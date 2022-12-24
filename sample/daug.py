@@ -11,6 +11,6 @@ project_name = sys.argv[1]
 
 image_file_path = home_dir + "/dl_image_manager/projects/%s/master/image.jpg" %(project_name)
 save_file_path = home_dir + "/dl_image_manager/projects/%s/build/"  %(project_name)
-gen = DataAugmentationGenerator(image_file_path=image_file_path, save_dir=save_file_path)
+gen = DataAugmentationGenerator(image_file_path=image_file_path, save_dir=save_file_path, save_file_prefix=project_name)
 
 gen.suite()

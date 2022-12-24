@@ -6,16 +6,23 @@ from tensorflow.keras.utils import array_to_img
 
 
 class DataAugmentationGenerator:
-    def __init__(self, image_file_path, base_img_size=(400,400), base_img_color=255, save_dir = "./"):
+    #if this is not in GUI environment show_image set to False
+    def __init__(self, image_file_path, base_img_size=(400,400), base_img_color=255, save_dir = "./", show_image=True):
         self.reest_count()
         self.base_img_size = base_img_size
         self.base_img_color = base_img_color
         self.save_dir = save_dir 
+        self.show_image = show_image
 
         #アップロードされた画像を読み込み
         self.image = image.load_img(image_file_path) #表示用のイメージデータ
         self.np_image = np.array(self.image)         #numpy配列化したもの
         self.target_image = self.np_image[np.newaxis, :, :, :] #data augmentation化する対象                      
+
+    def imshow(self, data):
+        if self.show_image == True:
+            plt.imshow(data)
+
 
     def show_image(self):
         #表示画像のサイズを設定
@@ -25,7 +32,7 @@ class DataAugmentationGenerator:
         plt.yticks(color = "None")
         plt.tick_params(bottom = False, left = False)
         #表示
-        plt.imshow(self.np_image)
+        self.imshow(self.np_image)
 
     def reest_count(self):
         self.count = 0
@@ -88,7 +95,7 @@ class DataAugmentationGenerator:
           plt.yticks(color = "None")
           plt.tick_params(bottom = False, left = False)
           #画像を表示
-          plt.imshow(show_img)
+          self.imshow(show_img)
         
           #データのセーブ処理
           #まずはベースとなる400x400画像を作る。背景は白(255,255,255)

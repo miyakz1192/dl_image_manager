@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-import xml.etree.ElementTree as ET
-import argparse
-
 parser = argparse.ArgumentParser()
 parser.add_argument("input_file_name", type=str)
 parser.add_argument("output_file_name", type=str)

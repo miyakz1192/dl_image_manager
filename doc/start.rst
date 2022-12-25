@@ -10,7 +10,9 @@ DL用の学習用画像を管理するためのフレームワーク
 
 3. data augumentation用のサーバ(以降、dataaugサーバ)
 
-4. 1~3を取りまとめるようなサーバ(以降、dlimgmgrサーバ)
+
+作業のメインはdataaugサーバにて行う。
+
 
 動機
 ====
@@ -46,8 +48,6 @@ ROOT-PROJECT NAME
 
 4. data augumentationとして自動生成に使うプログラム
 
-5. dlimgmgrが各サーバに仕事させるためのプログラム
-
 
 ソース管理すべきでないもの
 ------------------------------
@@ -64,29 +64,39 @@ ROOT-PROJECT NAME
 
    1. 人間がマスターの大元画像を用意する(例：ゲーム画像からgimpを使って部分を抜き出しjpgとして保存)@dataaug
 
-   2. 人間がdata augumentation用のjupyer notebookを作成する。このプロセスはいろいろと試行錯誤しながら実施することになる(その際全体画像サイズや、着目画像のサイズは意識)@dataaug
+   2. 人間がdata augumentation用のjupyer notebookを作成する。このプロセスはいろいろと試行錯誤しながら実施することになる(その際全体画像サイズや、着目画像のサイズは意識)。sapmple/data_aug_sample.pyを多くの場合は利用できる。これを使って作業すると、実際に生成された画像を確認できる。@dataaug
 
-   3. 人間がdata augumentation自動化用のスクリプトを作成する(No2を元に作成する)@dataaug
+   3. 人間がdata augumentation自動化用のスクリプトを作成する(No2を元に作成する)。ただし、sapmple/data_aug_sample.pyを利用できる。もし、No2の作業にて、sampleの動作から変更する必要がなければ、そのまま、sample/daug.pyを<project_name>/data_augmentation/に保存する。@dataaug
+
+   ※ daug.pyは第一引数にインプット画像となる＜プロジェクト名＞(プロジェクト名/master/image.jpg)。これが規定。
 
    4. 人間がNo2,3のソースをコミットする。また、大元のネタ画像もコミットする@dataaug
 
-   5. 人間が、大元のネタ画像(オリジナルサイズ 32 x 32)から、大元のネタ画像を含む「大元のネタ画像含有ネタ画像ファイル」(400 x 400など)を生成する。@dataaug
+   5. 人間が、大元のネタ画像(オリジナルサイズ 32 x 32)から、大元のネタ画像を含む「大元のネタ画像含有ネタ画像ファイル」(400 x 400など)を生成する。※bin/extend_image_size.pyを実行する(デフォルトでprojects/<project_name>/master/image_extended.jpgに保存される)。この画像をcommit pushする@dataaug
 
-   6. 人間が、No5のファイルをimglabelingサーバに転送する。@dataaug
+   6. 人間が、No5のファイルをimglabelingサーバに転送する(この作業はこのレポジトリをimglabelingサーバにてpullすれば良い)。@dataaug
 
    7. 人間が、No6によって転送されたファイルに対してラベリングするVOCラベリングが汎用的なので、VOCラベルにする。@imglabeling
 
-   8. 人間が、No7のラベルをmasterラベルとしてコミットする@imglabeling
+   8. 人間が、No7のラベルをmasterラベルとしてコミットする(pushする)@imglabeling
 
-   9. 人間が、git pullして最新の情報をDLしたうえで、project buildを実行する@dlimgmgr(dlimgmgrがdataaugサーバでdata augumentation自動化スクリプトを実行する。画像をダウンロードしてくる。画像ファイルに対してannotationをmasterからリネームして生成する。結果はproject/build配下に格納される)
+   9. 人間が、git pullして最新の情報をDLしたうえで、project buildを実行する@dataaug(dlimgmgrがdataaugサーバでdata augumentation自動化スクリプトを実行する。画像をダウンロードしてくる。画像ファイルに対してannotationをmasterからリネームして生成する。結果はproject/build配下に格納される)
 
 
 2. 既存projectに対する変更
    dataaugサーバでコードなどを変更してcommit/push。大元イメージファイルも同様
 
-3. projectをミックスさせて全体的な構成を行う
+3. projectをミックスさせて全体的な構成を行う@dataaug
+   ./bin/build_all.pyを実行する(各projectをbuildするだけ)
+
+
+   以下、pytorch固有のデータセット
    Annotations  ImageSets  JPEGImages
    それぞれを生成する。projectまたいでtrain/validの割合を一括指定可能とする。tar.gzで固める。pytorchサーバに転送する。
+      (メモ：各projectから一定の割合でtrain/validを抜き出す。これは汎用的な機能。割合は指定可能
+      　　　その上で、pytorch固有の上記3組を作り出す機能。これはpytorch専用の機能。この２パートに分ける)
+
+  
 
 4. pytorchサーバでprojectミックスさせたものを展開する(人間、@pytorch)
 

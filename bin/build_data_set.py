@@ -101,11 +101,11 @@ for project_name, train_val in data_set.items():
     print("======train====== %d" % (len(train_set)))
     for i in train_set:
         with open(train_file, "a") as f:
-            f.write(i+"\n")
+            f.write(os.path.splitext(i)[0]+"\n")
     print("=====val====== %d" % len(valid_set))
     for i in valid_set:
         with open(val_file, "a") as f:
-            f.write(i+"\n")
+            f.write(os.path.splitext(i)[0]+"\n")
 
 train_val_file = data_set_dir + "/" + IMAGE_SETS + "/" + IMAGE_SETS_MAIN + "/" + TRAIN_VAL_FILE
 test_file = data_set_dir + "/" + IMAGE_SETS + "/" + IMAGE_SETS_MAIN + "/" + TEST_FILE

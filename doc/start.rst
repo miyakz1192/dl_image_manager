@@ -80,10 +80,11 @@ ROOT-PROJECT NAME
    5. 人間が、大元のネタ画像(オリジナルサイズ 32 x 32)から、大元のネタ画像を含む「大元のネタ画像含有ネタ画像ファイル」(400 x 400など)を生成する。※bin/extend_image_size.pyを実行する(デフォルトでprojects/<project_name>/master/image_extended.jpgに保存される)。この画像をcommit pushする@dataaug
 
    6. 人間が、No5のファイルをimglabelingサーバに転送する(この作業はこのレポジトリをimglabelingサーバにてpullすれば良い)。@dataaug
+      (image_extended.jpgは単にimglabelingサーバでアノテーション作業をやりやすくするように用意されたファイルである。その後の画像処理には使われない)
 
    7. 人間が、No6によって転送されたファイルに対してラベリングするVOCラベリングが汎用的なので、VOCラベルにする。@imglabeling
 
-   8. 人間が、No7のラベルをmasterラベルとしてコミットする(pushする)@imglabeling
+   8. 人間が、No7のラベルをmasterラベルとしてコミットする(pushする)ファイル名はmaster/image_extended.xml@imglabeling
 
    9. 人間が、git pullして最新の情報をDLしたうえで、project buildを実行する@dataaug(dlimgmgrがdataaugサーバでdata augumentation自動化スクリプトを実行する。画像をダウンロードしてくる。画像ファイルに対してannotationをmasterからリネームして生成する。結果はproject/build配下に格納される)
 
@@ -91,7 +92,7 @@ ROOT-PROJECT NAME
 2. 既存projectに対する変更
    dataaugサーバでコードなどを変更してcommit/push。大元イメージファイルも同様
 
-3. projectをミックスさせて全体的な構成を行う@dataaug
+3. projectをミックスさせて全体的な構成を行う@dataaug 
    ./bin/build_all.pyを実行する(各projectをbuildするだけ)
 
    以下、pytorch固有のデータセットを実行するため、./bin/build_data_set.pyを実行する
@@ -99,10 +100,9 @@ ROOT-PROJECT NAME
    それぞれを生成する。projectまたいでtrain/validの割合を一括指定可能とする。tar.gzで固める。pytorchサーバに転送する。
       (メモ：各projectから一定の割合でtrain/validを抜き出す。これは汎用的な機能。割合は指定可能
       　　　その上で、pytorch固有の上記3組を作り出す機能。これはpytorch専用の機能。この２パートに分ける)
-
-  
-
+   
 4. pytorchサーバでprojectミックスさせたものを展開する(人間、@pytorch)
+
 
 ディレクトリ構成
 ===================
@@ -132,6 +132,18 @@ ROOT-PROJECT NAME
 "<>"でくくららた所が可変部分。
 ここで、<project_name>には具体的なプロジェクト名が入る。README.mdは任意。
 build配下のxは0以上の正の整数。
+
+特殊なproject(ja_char)
+============================
+
+今の所、上記のフレームワークから微妙に外れるprojectとしてja_charがある。
+これは、大量コーパスからそのコーパスで使われている日本語文字（かな漢字）を画像生成して、
+それをマスターにして、一旦はdata augumentationせずに(あまりに大量になりすぎるため）、学習に使用するというもの。
+フレームワーク通常時と比較して以下の差分がある。
+
+1. masterにjpgが無い。xmlは存在する(かなりイレギュラーな点か)
+2. daug.pyの実体処理はsample/daug.pyを使わずに、コーパスから画像を生成してbuild配下に大量jpgを配置。
+   実質的なdata augumentationは実行しない(noopのdata augumentationを実行したという解釈はできる)
 
 
 着目点

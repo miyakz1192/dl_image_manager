@@ -54,6 +54,11 @@ ROOT-PROJECT NAME
 
 上記No4によって自動生成されたすべての画像ファイル
 
+前提条件のようなもの
+----------------------
+
+利用する画像フォーマット、拡張子はjpgである。
+
 作業手順のまとめ
 -------------------
 
@@ -89,8 +94,7 @@ ROOT-PROJECT NAME
 3. projectをミックスさせて全体的な構成を行う@dataaug
    ./bin/build_all.pyを実行する(各projectをbuildするだけ)
 
-
-   以下、pytorch固有のデータセット
+   以下、pytorch固有のデータセットを実行するため、./bin/build_data_set.pyを実行する
    Annotations  ImageSets  JPEGImages
    それぞれを生成する。projectまたいでtrain/validの割合を一括指定可能とする。tar.gzで固める。pytorchサーバに転送する。
       (メモ：各projectから一定の割合でtrain/validを抜き出す。これは汎用的な機能。割合は指定可能

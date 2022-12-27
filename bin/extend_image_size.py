@@ -8,6 +8,11 @@ from tensorflow.keras.utils import array_to_img
 import argparse
 import os
 
+import sys
+sys.path.append("./lib/")
+from get_current_process_user_home_dir import *
+from dl_image_manager_constants import *
+home_dir = get_current_process_user_home_dir()
 
 import pdb
 
@@ -25,6 +30,7 @@ DEFAULT_COLOR = 255
 def get_args():
     parser = argparse.ArgumentParser()
 
+    parser.add_argument("project_name", type=str)
     parser.add_argument("target_image", type=str)
     parser.add_argument("--output_size", help="optional output size(widthxheight) like 400x400")
     parser.add_argument("--color", help="color like 255(unsigned char)", default=DEFAULT_COLOR)
@@ -48,11 +54,7 @@ def output_file(args):
         return
 
     print("set default output_file")
-    dir_name, file_name = os.path.split(args.target_image)
-    f,ext = os.path.splitext(file_name)
-
-    res = dir_name + "/" + f + "_extended" + ext
-    return res 
+    return home_dir + DL_IMAGE_MANAGER_PROJECTS_MASTER_EXTENDED_IMAGE % (args.project_name)
 
 
 

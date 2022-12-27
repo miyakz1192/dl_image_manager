@@ -1,5 +1,7 @@
 DL_IMAGE_MANAGER_PROJECTS_MASTER_IMAGE = "/dl_image_manager/projects/%s/master/image.jpg" 
 
+DL_IMAGE_MANAGER_PROJECTS_MASTER_EXTENDED_IMAGE = "/dl_image_manager/projects/%s/master/image_extended.jpg" 
+
 DL_IMAGE_MANAGER_PROJECTS_MASTER_XML = "/dl_image_manager/projects/%s/master/image_extended.xml" 
 
 DL_IMAGE_MANAGER_PROJECTS_BUILD = "/dl_image_manager/projects/%s/build/" 

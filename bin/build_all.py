@@ -19,6 +19,7 @@ for project_dir in project_dirs:
     print("INFO: building %s" % project_name)
 
     command = [home_dir + DL_IMAGE_MANAGER_BUILD_PROJECT_BIN, project_name] 
-    res = subprocess.run(command, capture_output=True, text=True).stdout
+    #res = subprocess.run(command, capture_output=True, text=True).stdout
+    res = subprocess.check_output(command)
     print(res)
 

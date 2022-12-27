@@ -1,0 +1,26 @@
+<annotation>
+	<folder>ja_char</folder>
+	<filename>image_extended.jpg</filename>
+	<path>/home/a/labelImg/projects/ja_char/image_extended.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>400</width>
+		<height>400</height>
+		<depth>1</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ja_char</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>7</xmin>
+			<ymin>7</ymin>
+			<xmax>55</xmax>
+			<ymax>55</ymax>
+		</bndbox>
+	</object>
+</annotation>

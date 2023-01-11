@@ -1,20 +1,20 @@
 <annotation>
-	<folder>closew</folder>
-	<filename>image_extended.jpg</filename>
-	<path>/home/a/labelImg/projects/closew/image_extended.jpg</path>
+	<folder>ja_char</folder>
+	<filename>ja_char_0.xml</filename>
+	<path>/home/a/labelImg/projects/ja_char/image_extended.jpg</path>
 	<source>
 		<database>Unknown</database>
 	</source>
 	<size>
 		<width>64</width>
 		<height>64</height>
-		<depth>3</depth>
+		<depth>1</depth>
 	</size>
 	<segmented>0</segmented>
 	<object>
-		<name>close</name>
+		<name>ja_char</name>
 		<pose>Unspecified</pose>
-		<truncated>1</truncated>
+		<truncated>0</truncated>
 		<difficult>0</difficult>
 		<bndbox>
 			<xmin>1</xmin>

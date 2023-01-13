@@ -22,4 +22,5 @@ for project_dir in project_dirs:
     #res = subprocess.run(command, capture_output=True, text=True).stdout
     res = subprocess.check_output(command)
     print(res)
+    sys.stdout.flush()
 

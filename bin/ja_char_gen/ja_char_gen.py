@@ -4,24 +4,23 @@ sys.path.append("./lib/")
 
 from get_current_process_user_home_dir import *
 from dl_image_manager_constants import *
-
-import argparse
-
-parser = argparse.ArgumentParser()
-parser.add_argument("project_name", type=str)
-args = parser.parse_args()
-
 home_dir = get_current_process_user_home_dir()
 
-project_name = args.project_name
-
-save_file_path = home_dir + DL_IMAGE_MANAGER_PROJECTS_BUILD %(project_name) 
-aux_file_path = home_dir + DL_IMAGE_MANAGER_PROJECT %(project_name) + "aux_data/"
+temp_file_path = home_dir + DL_IMAGE_MANAGER_JA_CHAR_GEN_TEMP
+aux_file_path = home_dir + DL_IMAGE_MANAGER_JA_CHAR_GEN_AUX_FILE_PATH
 
 #日本語のコーパスを持ってきて、文字を全部一度に読み込み。重複を削除した文字一覧を作成する。（漢字やカタカナなどを含む)
 
 #コードは以下をそのまま流用させていただきました。大変ありがとうございます。
 #https://qiita.com/y_itoh/items/fa04c1e2f3df2e807d61
+
+print(os.getcwd())
+print(home_dir + DL_IMAGE_MANAGER)
+print(os.getcwd() == home_dir + DL_IMAGE_MANAGER)
+
+if not os.getcwd() == home_dir + DL_IMAGE_MANAGER:
+    print("ERROR: chenge dir to %s" % (home_dir + DL_IMAGE_MANAGER))
+    exit(1)
 
 import re
 import zipfile
@@ -34,6 +33,7 @@ import japanize_matplotlib
 import keras.utils.image_utils as image
 from keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.utils import array_to_img
+import subprocess
 
 URL = 'https://www.aozora.gr.jp/cards/000081/files/43737_ruby_19028.zip'
 
@@ -89,22 +89,24 @@ text = convert(download_file)
 #print(text)
 print(len(text))
 
-
 # テキストの1文字１文字をjpgファイルとして保存する
 dupremoved_text = list(set(list(text)))
 print(len(dupremoved_text))
 
+
+import pdb
+
 n = 0
 #dupremoved_text = dupremoved_text[:10] #デバッグ用
 for i in dupremoved_text:
-    #ベースとなる400 x 400イメージを作成する（背景は白）
-    base = np.full((400, 400,3), 255)
+    #ベースとなる64 x 64イメージを作成する（背景は白）
+    base = np.full((64, 64,3), 255)
 
     fig, ax = plt.subplots(figsize=(0.64, 0.64))
     ax.axis("off")
     #ax.text(0, 0.2, "こ", size=32)
     ax.text(0, 0.2, i, size=32)
-    file_name = save_file_path + "/ja_char_%d.jpg" % (n)
+    file_name = temp_file_path + "/ja_char_%d.jpg" % (n)
     #テンポラリ
     plt.savefig(file_name)
 
@@ -116,4 +118,17 @@ for i in dupremoved_text:
     base[0:64,0:64] = ja_c[0:64,0:64]
     save_img = array_to_img(base, scale = False)
     image.save_img(file_name, save_img)
+
+    project_name = "ja_char_%d" % (n)
+
+    command = [home_dir + DL_IMAGE_MANAGER_MAKE_PROJECT_BIN, project_name]
+    subprocess.check_output(command)
+    command = ["cp", file_name, home_dir + DL_IMAGE_MANAGER_PROJECTS_MASTER_IMAGE % (project_name)]
+    subprocess.check_output(command)
+    command = ["cp", home_dir + DL_IMAGE_MANAGER_SAMPLE_DAUG2, home_dir + DL_IMAGE_MANAGER_PROJECTS_DATAAUG_BIN % (project_name)]
+    subprocess.check_output(command)
+    command = ["cp", home_dir + DL_IMAGE_MANAGER_JA_CHAR_GEN_MASTER_XML, home_dir + DL_IMAGE_MANAGER_PROJECTS_MASTER_XML % (project_name)]
+    subprocess.check_output(command)
     n += 1
+
+

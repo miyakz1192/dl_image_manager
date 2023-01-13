@@ -7,13 +7,14 @@ from tensorflow.keras.utils import array_to_img
 
 class DataAugmentationGenerator:
     #if this is not in GUI environment show_image set to False
-    def __init__(self, image_file_path, base_img_size=(400,400), base_img_color=255, save_dir = "./", show_image=True, save_file_prefix=""):
+    def __init__(self, image_file_path, base_img_size=(400,400), base_img_color=255, cval=125, save_dir = "./", show_image=True, save_file_prefix=""):
         self.reest_count()
         self.base_img_size = base_img_size
         self.base_img_color = base_img_color
         self.save_dir = save_dir 
         self.show_image = show_image
         self.save_file_prefix = save_file_prefix
+        self.cval = cval
 
         #アップロードされた画像を読み込み
         self.image = image.load_img(image_file_path) #表示用のイメージデータ
@@ -51,12 +52,12 @@ class DataAugmentationGenerator:
         #引数が10だと若干動かし過ぎ感がある
         #以下は、補完時に何も指定していない
         #height_datagen = ImageDataGenerator(height_shift_range = 5)
-        height_datagen = ImageDataGenerator(height_shift_range = 5,fill_mode="constant", cval=125)
+        height_datagen = ImageDataGenerator(height_shift_range = 5,fill_mode="constant", cval=self.cval)
         self.show_and_save(height_datagen, self.target_image)
 
     def zoom(self):
         #0.5〜1.5の間でランダムに拡大又は縮小するImageDataGeneratorを作成
-        zoom_datagen = ImageDataGenerator(zoom_range = [0.7, 1.3],fill_mode="constant", cval=125)
+        zoom_datagen = ImageDataGenerator(zoom_range = [0.7, 1.3],fill_mode="constant", cval=self.cval)
         self.show_and_save(zoom_datagen, self.target_image)
 
     def brightness(self):
@@ -65,7 +66,7 @@ class DataAugmentationGenerator:
         self.show_and_save(brightness_datagen, self.target_image)
 
     def mix(self):
-        datagen = ImageDataGenerator(rotation_range = 0.5,width_shift_range = 0.1,height_shift_range = 0.1,zoom_range = [0.7, 1.3],fill_mode="constant", cval=125)
+        datagen = ImageDataGenerator(rotation_range = 0.5,width_shift_range = 0.1,height_shift_range = 0.1,zoom_range = [0.7, 1.3],fill_mode="constant", cval=self.cval)
         self.show_and_save(datagen, self.target_image)
 
     def mix6(self):

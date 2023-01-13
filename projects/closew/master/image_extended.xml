@@ -1,14 +1,14 @@
 <annotation>
-	<folder>master</folder>
+	<folder>closew</folder>
 	<filename>image_extended.jpg</filename>
-	<path>/home/a/dl_image_manager/projects/close/master/image_extended.jpg</path>
+	<path>/home/a/labelImg/projects/closew/image_extended.jpg</path>
 	<source>
 		<database>Unknown</database>
 	</source>
 	<size>
 		<width>64</width>
 		<height>64</height>
-		<depth>1</depth>
+		<depth>3</depth>
 	</size>
 	<segmented>0</segmented>
 	<object>

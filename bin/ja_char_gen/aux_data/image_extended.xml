@@ -1,13 +1,13 @@
 <annotation>
 	<folder>ja_char</folder>
-	<filename>image_extended.jpg</filename>
+	<filename>ja_char_0.xml</filename>
 	<path>/home/a/labelImg/projects/ja_char/image_extended.jpg</path>
 	<source>
 		<database>Unknown</database>
 	</source>
 	<size>
-		<width>400</width>
-		<height>400</height>
+		<width>64</width>
+		<height>64</height>
 		<depth>1</depth>
 	</size>
 	<segmented>0</segmented>
@@ -17,10 +17,10 @@
 		<truncated>0</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>7</xmin>
-			<ymin>7</ymin>
-			<xmax>55</xmax>
-			<ymax>55</ymax>
+			<xmin>1</xmin>
+			<ymin>1</ymin>
+			<xmax>64</xmax>
+			<ymax>64</ymax>
 		</bndbox>
 	</object>
 </annotation>

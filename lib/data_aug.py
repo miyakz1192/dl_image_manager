@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.utils import array_to_img
 
-from dl_image_manager_settings import *
+from dl_image_manager_config import *
 
 class DataAugmentationGenerator:
     #if this is not in GUI environment show_image set to False
@@ -24,6 +24,8 @@ class DataAugmentationGenerator:
         self.target_image = self.np_image[np.newaxis, :, :, :] #data augmentation化する対象                      
 
     def determine_base_image_size(self):
+        import pdb
+        pdb.set_trace()
         temp = dl_image_manager_forcing_global_base_image_size()
         if temp is not None:
             self.base_img_size = temp

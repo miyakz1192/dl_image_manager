@@ -24,8 +24,6 @@ class DataAugmentationGenerator:
         self.target_image = self.np_image[np.newaxis, :, :, :] #data augmentation化する対象                      
 
     def determine_base_image_size(self):
-        import pdb
-        pdb.set_trace()
         temp = dl_image_manager_forcing_global_base_image_size()
         if temp is not None:
             self.base_img_size = temp

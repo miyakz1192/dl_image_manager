@@ -4,12 +4,14 @@ import matplotlib.pyplot as plt
 from keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.utils import array_to_img
 
+from dl_image_manager_settings import *
 
 class DataAugmentationGenerator:
     #if this is not in GUI environment show_image set to False
     def __init__(self, image_file_path, base_img_size=(400,400), base_img_color=255, cval=125, save_dir = "./", show_image=True, save_file_prefix=""):
-        self.reest_count()
+        self.reset_count()
         self.base_img_size = base_img_size
+        self.determine_base_image_size()
         self.base_img_color = base_img_color
         self.save_dir = save_dir 
         self.show_image = show_image
@@ -20,6 +22,11 @@ class DataAugmentationGenerator:
         self.image = image.load_img(image_file_path) #表示用のイメージデータ
         self.np_image = np.array(self.image)         #numpy配列化したもの
         self.target_image = self.np_image[np.newaxis, :, :, :] #data augmentation化する対象                      
+
+    def determine_base_image_size(self):
+        temp = dl_image_manager_forcing_global_base_image_size()
+        if temp is not None:
+            self.base_img_size = temp
 
     def imshow(self, data):
         if self.show_image == True:
@@ -36,7 +43,7 @@ class DataAugmentationGenerator:
         #表示
         self.imshow(self.np_image)
 
-    def reest_count(self):
+    def reset_count(self):
         self.count = 0
 
     def rotation(self):

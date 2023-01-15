@@ -18,7 +18,7 @@ project_name = args.project_name
 
 image_file_path = home_dir + DL_IMAGE_MANAGER_PROJECTS_MASTER_IMAGE %(project_name)
 save_file_path = home_dir + DL_IMAGE_MANAGER_PROJECTS_BUILD %(project_name)
-gen = DataAugmentationGenerator(image_file_path=image_file_path, save_dir=save_file_path, save_file_prefix=project_name)
+gen = DataAugmentationGenerator(image_file_path=image_file_path, save_dir=save_file_path, save_file_prefix=project_name,cval=255)
 
 #gen.suite()
 gen.mix()

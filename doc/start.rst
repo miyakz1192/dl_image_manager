@@ -103,6 +103,22 @@ ROOT-PROJECT NAME
    
 4. pytorchサーバでprojectミックスさせたものを展開する(人間、@pytorch)
 
+設定
+------
+
+利用する学習フレームワークによっては、base_image_sizeを変更する必要がある。
+学習フレームワーク応じて以下を編集して、clear_project,
+build_all.pyおよびbuild_data_setを実行する。::
+
+  a@dataaug:~/dl_image_manager$ cat lib/dl_image_manager_settings.py 
+  ###########################################################
+  # DL Image Manager Settings
+  ###########################################################
+  #ResNet34
+  #DL_IMAGE_MANAGER_FORCING_GLOBAL_BASE_IMAGE_SIZE = (64,64)
+  #SSD
+  DL_IMAGE_MANAGER_FORCING_GLOBAL_BASE_IMAGE_SIZE = (400,400)
+
 
 ディレクトリ構成
 ===================

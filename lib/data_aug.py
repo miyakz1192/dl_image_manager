@@ -8,7 +8,7 @@ from dl_image_manager_config import *
 
 class DataAugmentationGenerator:
     #if this is not in GUI environment show_image set to False
-    def __init__(self, image_file_path, base_img_size=(400,400), base_img_color=255, cval=125, save_dir = "./", show_image=True, save_file_prefix=""):
+    def __init__(self, image_file_path, base_img_size=(400,400), base_img_color=255, cval=125, save_dir = "./", show_image=True, save_file_prefix="", mode="lu"):
         self.reset_count()
         self.base_img_size = base_img_size
         self.determine_base_image_size()
@@ -17,6 +17,7 @@ class DataAugmentationGenerator:
         self.show_image = show_image
         self.save_file_prefix = save_file_prefix
         self.cval = cval
+        self.mode = mode
 
         #アップロードされた画像を読み込み
         self.image = image.load_img(image_file_path) #表示用のイメージデータ
@@ -112,7 +113,15 @@ class DataAugmentationGenerator:
           #targetのサイズをbaseに埋め込む
           tx = data[0].shape[0]
           ty = data[0].shape[1]
-          base[0:tx,0:ty] = data[0][0:tx,0:ty]
+          bx = base.shape[0] 
+          #by = base.shape[1]  #will be used by future?
+          if self.mode == "lu": #default
+            #if default set target image to base image at Left Upper
+            base[0:ty,0:tx] = data[0][0:tx,0:ty]
+          elif self.mode == "ru":
+            #if ru specified, set target image to base image at Right Upper
+            base[0:ty,bx-tx:bx] = data[0][0:tx,0:ty]
+
           save_img = array_to_img(base, scale = False)
           image.save_img(self.save_dir + "/" + self.save_file_prefix + "_" + str(self.count) + ".jpg", save_img)
           self.count += 1

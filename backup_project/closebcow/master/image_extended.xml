@@ -1,0 +1,26 @@
+<annotation>
+	<folder>closew</folder>
+	<filename>image_extended.jpg</filename>
+	<path>/home/a/labelImg/projects/closew/image_extended.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>38</width>
+		<height>39</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>closebcow</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1</xmin>
+			<ymin>1</ymin>
+			<xmax>38</xmax>
+			<ymax>39</ymax>
+		</bndbox>
+	</object>
+</annotation>

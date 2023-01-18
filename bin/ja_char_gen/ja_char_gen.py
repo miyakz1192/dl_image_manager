@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+import cv2
 import sys
 sys.path.append("./lib/")
 
+from dl_image_manager_config import *
 from get_current_process_user_home_dir import *
 from dl_image_manager_constants import *
 home_dir = get_current_process_user_home_dir()
@@ -118,6 +120,12 @@ for i in dupremoved_text:
     base[0:64,0:64] = ja_c[0:64,0:64]
     save_img = array_to_img(base, scale = False)
     image.save_img(file_name, save_img)
+
+    if DL_IMAGE_MANAGER_EDGE_MODE is True:
+        img_gray = cv2.imread(file_name,cv2.IMREAD_GRAYSCALE) 
+        img_canny = cv2.Canny(img_gray, 100, 200)
+        cv2.imwrite(file_name, img_canny)
+
 
     project_name = "ja_char_%d" % (n)
 

@@ -25,8 +25,13 @@ command = [home_dir + DL_IMAGE_MANAGER_PROJECTS_DATAAUG_BIN % (project_name), pr
 print("INFO: bulding project of %s" % (project_name))
 print("INFO: executing projects daug.py")
 
-res = subprocess.run(command, capture_output=True, text=True).stdout
-print(res)
+res = subprocess.run(command, capture_output=True, text=True)
+print(res.stdout)
+print(res.stderr)
+if res.returncode != 0:
+    print("ERROR: build error")
+    sys.exit(1)
+
 
 build_file_path = home_dir + DL_IMAGE_MANAGER_PROJECTS_BUILD % (project_name)
 

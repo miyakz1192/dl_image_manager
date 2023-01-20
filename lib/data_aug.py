@@ -107,20 +107,24 @@ class DataAugmentationGenerator:
           #画像を表示
           self.imshow(show_img)
         
+
           #データのセーブ処理
           #まずはベースとなる400x400画像を作る。背景は白(255,255,255)
           base = np.full(self.base_img_size + (3,), 255) #第一引数はサイズ(x,y)とともにチャネル数が必要。(x,y,c)となる。
           #targetのサイズをbaseに埋め込む
-          tx = data[0].shape[0]
-          ty = data[0].shape[1]
-          bx = base.shape[0] 
-          #by = base.shape[1]  #will be used by future?
+          tx = data[0].shape[1]
+          ty = data[0].shape[0]
+          bx = base.shape[1]  
+          #by = base.shape[0] #will be used by future?
           if self.mode == "lu": #default
             #if default set target image to base image at Left Upper
-            base[0:ty,0:tx] = data[0][0:tx,0:ty]
+            base[0:ty,0:tx] = data[0][0:ty,0:tx]
           elif self.mode == "ru":
+#            import pdb
+#            pdb.set_trace()
             #if ru specified, set target image to base image at Right Upper
-            base[0:ty,bx-tx:bx] = data[0][0:tx,0:ty]
+            base[0:ty,bx-tx:bx] = data[0][0:ty,0:tx]
+#            base[0:ty,bx-tx+1:bx] = data[0][0:ty,0:tx]
 
           save_img = array_to_img(base, scale = False)
           image.save_img(self.save_dir + "/" + self.save_file_prefix + "_" + str(self.count) + ".jpg", save_img)

@@ -11,7 +11,6 @@ class DataAugmentationGenerator:
     def __init__(self, image_file_path, base_img_size=(400,400), base_img_color=255, cval=125, save_dir = "./", show_image=True, save_file_prefix="", mode="lu"):
         self.reset_count()
         self.base_img_size = base_img_size
-        self.determine_base_image_size()
         self.base_img_color = base_img_color
         self.save_dir = save_dir 
         self.show_image = show_image
@@ -24,9 +23,17 @@ class DataAugmentationGenerator:
         self.np_image = np.array(self.image)         #numpy配列化したもの
         self.target_image = self.np_image[np.newaxis, :, :, :] #data augmentation化する対象                      
 
-    def determine_base_image_size(self):
+        self.determine_base_img_size()
+
+    def determine_base_img_size(self):
         temp = dl_image_manager_forcing_global_base_image_size()
-        if temp is not None:
+        if temp is None:
+            raise ValueError("DL_IMAGE_MANAGER_FORCING_GLOBAL_BASE_IMAGE_SIZE is not defined!")
+
+        if temp[0] == -1 and temp[1] == -1:
+            #set base_img_size eq self.target_image's size(x,y)
+            self.base_img_size = self.target_image.shape[1:3]
+        else:
             self.base_img_size = temp
 
     def imshow(self, data):

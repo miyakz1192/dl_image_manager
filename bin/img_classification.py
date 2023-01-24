@@ -83,9 +83,7 @@ if __name__ == "__main__":
 
     print("CONFIRM: move this ?[y]")
     i = input()
-    if i != "y":
+    if i == "y":
+        m.move_target()
+    else:
         print("QUIT")
-
-    m.move_target()
-
-

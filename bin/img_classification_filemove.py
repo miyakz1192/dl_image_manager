@@ -34,5 +34,5 @@ if __name__ == "__main__":
     for i in range(len(img_files)):
         if flags[i] == "True":
             temp = str(uuid.uuid4())
-            shutil.move(img_files[i], args.output_dir+"/"+temp)
-            print("INFO: %s => %s" % (img_files[i], args.output_dir+"/"+temp))
+            shutil.move(img_files[i], args.output_dir+"/"+temp+".jpg")
+            print("INFO: %s => %s" % (img_files[i], args.output_dir+"/"+temp+".jpg"))

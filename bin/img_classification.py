@@ -73,8 +73,9 @@ class ManualImageClassifier:
     def move_target(self):
         for i in range(len(self.in_files)):
             if self.move_target_flags[i] is True:
-                shutil.move(self.in_files[i], self.output_dir+"/")
-                print("INFO: %s => %s" % (self.in_files[i], self.output_dir+"/"+str(uuid.uuid4())))
+                temp = str(uuid.uuid4())
+                shutil.move(self.in_files[i], self.output_dir+"/"+temp)
+                print("INFO: %s => %s" % (self.in_files[i], self.output_dir+"/"+temp))
 
 
 if __name__ == "__main__":

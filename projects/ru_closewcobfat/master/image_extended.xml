@@ -6,21 +6,21 @@
 		<database>Unknown</database>
 	</source>
 	<size>
-		<width>32</width>
-		<height>32</height>
-		<depth>1</depth>
+		<width>400</width>
+		<height>400</height>
+		<depth>3</depth>
 	</size>
 	<segmented>0</segmented>
 	<object>
-		<name>close</name>
+		<name>closewcobfat</name>
 		<pose>Unspecified</pose>
 		<truncated>1</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>1</xmin>
+			<xmin>320</xmin>
 			<ymin>1</ymin>
-			<xmax>32</xmax>
-			<ymax>32</ymax>
+			<xmax>400</xmax>
+			<ymax>80</ymax>
 		</bndbox>
 	</object>
 </annotation>

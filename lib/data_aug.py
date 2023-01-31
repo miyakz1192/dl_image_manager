@@ -4,22 +4,37 @@ import matplotlib.pyplot as plt
 from keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.utils import array_to_img
 
+from dl_image_manager_config import *
 
 class DataAugmentationGenerator:
     #if this is not in GUI environment show_image set to False
-    def __init__(self, image_file_path, base_img_size=(400,400), base_img_color=255, cval=125, save_dir = "./", show_image=True, save_file_prefix=""):
-        self.reest_count()
+    def __init__(self, image_file_path, base_img_size=(400,400), base_img_color=255, cval=125, save_dir = "./", show_image=True, save_file_prefix="", mode="lu"):
+        self.reset_count()
         self.base_img_size = base_img_size
         self.base_img_color = base_img_color
         self.save_dir = save_dir 
         self.show_image = show_image
         self.save_file_prefix = save_file_prefix
         self.cval = cval
+        self.mode = mode
 
         #アップロードされた画像を読み込み
         self.image = image.load_img(image_file_path) #表示用のイメージデータ
         self.np_image = np.array(self.image)         #numpy配列化したもの
         self.target_image = self.np_image[np.newaxis, :, :, :] #data augmentation化する対象                      
+
+        self.determine_base_img_size()
+
+    def determine_base_img_size(self):
+        temp = dl_image_manager_forcing_global_base_image_size()
+        if temp is None:
+            raise ValueError("DL_IMAGE_MANAGER_FORCING_GLOBAL_BASE_IMAGE_SIZE is not defined!")
+
+        if temp[0] == -1 and temp[1] == -1:
+            #set base_img_size eq self.target_image's size(x,y)
+            self.base_img_size = self.target_image.shape[1:3]
+        else:
+            self.base_img_size = temp
 
     def imshow(self, data):
         if self.show_image == True:
@@ -36,7 +51,7 @@ class DataAugmentationGenerator:
         #表示
         self.imshow(self.np_image)
 
-    def reest_count(self):
+    def reset_count(self):
         self.count = 0
 
     def rotation(self):
@@ -99,13 +114,25 @@ class DataAugmentationGenerator:
           #画像を表示
           self.imshow(show_img)
         
+
           #データのセーブ処理
           #まずはベースとなる400x400画像を作る。背景は白(255,255,255)
           base = np.full(self.base_img_size + (3,), 255) #第一引数はサイズ(x,y)とともにチャネル数が必要。(x,y,c)となる。
           #targetのサイズをbaseに埋め込む
-          tx = data[0].shape[0]
-          ty = data[0].shape[1]
-          base[0:tx,0:ty] = data[0][0:tx,0:ty]
+          tx = data[0].shape[1]
+          ty = data[0].shape[0]
+          bx = base.shape[1]  
+          #by = base.shape[0] #will be used by future?
+          if self.mode == "lu": #default
+            #if default set target image to base image at Left Upper
+            base[0:ty,0:tx] = data[0][0:ty,0:tx]
+          elif self.mode == "ru":
+#            import pdb
+#            pdb.set_trace()
+            #if ru specified, set target image to base image at Right Upper
+            base[0:ty,bx-tx:bx] = data[0][0:ty,0:tx]
+#            base[0:ty,bx-tx+1:bx] = data[0][0:ty,0:tx]
+
           save_img = array_to_img(base, scale = False)
           image.save_img(self.save_dir + "/" + self.save_file_prefix + "_" + str(self.count) + ".jpg", save_img)
           self.count += 1

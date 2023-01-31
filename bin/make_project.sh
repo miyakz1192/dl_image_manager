@@ -12,6 +12,13 @@ mkdir -p projects/${project_name}/build
 mkdir -p projects/${project_name}/data_augmentation
 mkdir -p projects/${project_name}/jupyer_notebook
 
-cp ./sample/daug.py projects/${project_name}/data_augmentation/daug.py
+echo ${project_name} | grep "^ru_" >& /dev/null
+if [ $? -eq 0 ]; then
+	echo "INFO: ru_ mode"
+	cp ./sample/ru_daug.py projects/${project_name}/data_augmentation/daug.py
+else
+	echo "INFO: lu_ mode(default)"
+	cp ./sample/daug.py projects/${project_name}/data_augmentation/daug.py
+fi
 chmod 766 projects/${project_name}/data_augmentation/daug.py
 touch projects/${project_name}/README.md

@@ -1,3 +1,5 @@
+#!/usr/bin/bash 
+
 if [ $# -ne 1 ]; then
 	echo "USAGE: resnet34 or ssd"
 	exit 1

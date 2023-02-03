@@ -20,7 +20,16 @@ for project_dir in project_dirs:
 
     command = [home_dir + DL_IMAGE_MANAGER_BUILD_PROJECT_BIN, project_name] 
     #res = subprocess.run(command, capture_output=True, text=True).stdout
-    res = subprocess.check_output(command)
-    print(res)
+    res = None
+    try:
+        res = subprocess.run(command, capture_output=True)
+        print(res.stdout.decode())
+        print(res.stderr.decode())
+        #res = subprocess.check_output(command)
+    except Exception as e:
+        print("ERROR:", e)
+        print(res.stdout.decode())
+        print(res.stderr.decode())
+
     sys.stdout.flush()
 

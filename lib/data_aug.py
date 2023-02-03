@@ -6,6 +6,9 @@ from tensorflow.keras.utils import array_to_img
 
 from dl_image_manager_config import *
 
+def dl_image_manager_forcing_global_base_image_size():
+    return DL_IMAGE_MANAGER_FORCING_GLOBAL_BASE_IMAGE_SIZE
+
 class DataAugmentationGenerator:
     #if this is not in GUI environment show_image set to False
     def __init__(self, image_file_path, base_img_size=(400,400), base_img_color=255, cval=125, save_dir = "./", show_image=True, save_file_prefix="", mode="lu"):

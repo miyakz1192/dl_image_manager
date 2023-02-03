@@ -1,3 +1,5 @@
+#!/usr/bin/bash 
+
 if [ $# -ne 1 ]; then
 	echo "USAGE: resnet34 or ssd"
 	exit 1
@@ -5,7 +7,7 @@ fi
 
 type=$1
 
-./build.sh
+./build.sh ${type}
 
 if [ ${type} == "resnet34" ]; then
 	echo "resnet34"

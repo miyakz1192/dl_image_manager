@@ -7,7 +7,7 @@ fi
 
 type=$1
 
-./build.sh
+./build.sh ${type}
 
 if [ ${type} == "resnet34" ]; then
 	echo "resnet34"

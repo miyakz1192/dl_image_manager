@@ -190,9 +190,114 @@ pytorch_usr
 pytorch_pass
 pytorch_target_home #(projectミックスしたtar.gzを格納するdir)
 
+ワークフロー構築のためのメモ
+=================================
+
+以下からの引用
+https://github.com/miyakz1192/game_ad_automation/commit/6501be44dd9c0bce26ff72607f366df98ba16b4c
+
+以下。::
+
+|物体検出や画像認識の改善のために学習データの追加と学習、検証、実機でのテストプレーという一連のワークフローを効率的に回す仕組みが無いとやってられん。
+|SSDとResNet34で学習データと、テスト結果、重みの組を管理する仕組みが必要。
+|まずはそこだろうか。あとは、このワークフローが完成してNo2の改善がイマイチとなると、一回、深層学習の基本に戻って調査し直すしかあるまい。
+
+ということで、このworkflowを作ってみることにする。
+
+考慮が必要な点は
+
+1. 学習データの追加が簡単にできること
+
+2. 結果が管理しやすいこと(SSD/ResNetのソースと、学習データ、重みをセットで管理)
+
+3. タスクの状況が見えること
+
+4. 結果のGAAへのデプロイ、アンデプロイが簡単に行えること 
 
 
+まずは、データの管理方法について検討が必要なのではないか
 
+
+学習データ(学習タスクアウトプット)の管理単位
+-----------------------------------------------
+
+まず、学習データの大元としてはdl_image_managerで管理している各projectが最小単位として考えられる。
+各学習データをbuildした結果がdata_setと言える。
+
+つまりdata_set ∋  project群となる。data_set.tar.gzは80MB位。あと、data_set.tar.gzを生成したプログラム(つまりdl_image_manager)もバックアップしたほうが良いので、こちらもバックアップしたい。こちらのサイズは1.8GBくらい(大きい！）
+
+あと、各data_set.tar.gzを元にSSDとResNetで学習を行う。こちらも結果のweightとソースはともにバックアップしておきたい。
+
+この単位を学習タスクアウトプットと一応呼んでおく。
+
+学習タスクアウトプットの生成
+-----------------------------------------------
+
+dl_image_managerサーバを基点に以下を実施する
+
+1. 人間が、新規projectなどを作ったり、既存projectに変更を加えたりする
+
+2. 人間がcreate_task.shを実行する
+
+3. create_task.shでは一連の以下が実行される
+
+3-1. ./learn_batch.sh ssdを実行して、projectを再buildして、data_set.tar.gzを生成する。また、ssdで学習を実行する
+
+3-2. dl_image_managerのソースをバックアップする(この際、容量節約のためdata_setディレクトリ配下を削除する。また、data_set.tar.gzはこのバックアップに含まれる)
+
+3-3. ssdサーバ(pytorch)の/home/a/pytorch_ssdをまるごとバックアップして、dl_image_managerにダウンロードする(ssd.tar.gz)
+
+3-4. ./learn_batch.sh resnet34を実行して、projectを再buildして、data_set.tar.gzを生成する。また、resnet34で学習を実行する
+
+3-5. dl_image_managerのソースをバックアップする(この際、容量節約のためdata_setディレクトリ配下を削除する。また、data_set.tar.gzはこのバックアップに含まれる)
+
+3-6. resnet34サーバ(pytorch)の/home/a/ressetをまるごとバックアップして、dl_image_managerにダウンロードする(resnet34.tar.gz)
+
+3.7. 上記アーカイブ群をtarで固めてgaa_learning_task配下のoutputディレクトリに配置しておく
+
+※　注意
+---------
+
+lib/dl_image_manager_config.pyをssd/resnet34で入れ替える必要がある。どのような処理が良いかは考える必要がある。
+DL_IMAGE_MANAGER_FORCING_GLOBAL_BASE_IMAGE_SIZEをSSD/ResNet34に応じて追記するか、ファイル自体をまるごと置き換えるか。前者のほうがdl_image_manager_config.pyの変更に強そうな気がしなくもないが？？
+
+buildrcが設定されていないとエラーをはくようにすると親切だが、、、、
+
+SSDとResNet34の各タスクで一緒に学習結果をゲーム画像でテストした結果も学習タスクアウトプットに含まれると良い。
+
+学習タスクアウトプットの表示と削除
+-----------------------------------------------
+
+上記tarがoutputディレクトリにあるのでそれを見れば良い。
+outputディレクトリ配下に学習タスクアウトプットの名前がついたディレクトリが更にあって、
+そこに簡単なメモを記したtextが入っているといい感じかも
+
+学習タスクアウトプットのデプロイ
+---------------------------------
+
+gaa_learning_taskのoutput配下のディレクトリを1つ選択してdepoy.shを実行する
+dl_image_managerのbuildrcを読み込み、ssd/resnet34のサーバ(pytorch)に以下を実行する
+
+1. SSDの場合、ssd.tar.gzからタイムスタンプが最新のweightを抜き出して、それをpytorch_ssdサーバの/home/a/pytorch_ssdに配置する(weight/latest_weight.pth)
+
+2. ResNet34の場合も同様に実施する(resset34.tar.gz)
+
+※　注意
+------------
+
+GAA経由で動作する場合はlatest_weight.pthを参照して動作する必要がある。
+学習タスクアウトプットにssd.tar.gzまたはresnet34.tar.gzが無い場合は、SSD/ResNet34のどちらかのdeployを無視する
+(どちらもない場合はどちらのdepoyも無視＝つまりなにもdeployされない)
+
+
+考えられるシナリオ
+----------------------
+
+1. projectを１つ追加する。これは典型的なシナリオでcreate_task.sh/depoy.shが動作しそう
+
+2. SSD/ResNet34のプログラムを改変する。同上。
+
+3. SSDとResNet34で対象とするprojectを変えたい。例えば、SSDではja_charを必要とするし、ResNet34ではやっぱり必要としない(このようなことが今後発生するか不明だけど・・・）、この場合は、create_task.shで実行したいタスクを選択出来るようにしたら良い。(SSDはこっちのprojectsでResNet34はこっちのprojects)など。なので、create_task.shで種別-どのprojectsディレクトリの関連を設定するファイルが必要。それを見て動作。また、dl_image_manager配下にはデフォルトでprojectsディレクトリがあり、こちらがすべてのタスクで使用される仕様のため、例えば、SSD_projectsというディレクトリがあり、こちらがSSD専用のprojectsにしたければ、そちらを指定した設定ファイルを作っておく必要がある。など。
 
 
 

@@ -255,15 +255,19 @@ dl_image_managerサーバを基点に以下を実施する
 
 3.7. 上記アーカイブ群をtarで固めてgaa_learning_task配下のoutputディレクトリに配置しておく
 
+
+
 ※　注意
 ---------
 
 lib/dl_image_manager_config.pyをssd/resnet34で入れ替える必要がある。どのような処理が良いかは考える必要がある。
 DL_IMAGE_MANAGER_FORCING_GLOBAL_BASE_IMAGE_SIZEをSSD/ResNet34に応じて追記するか、ファイル自体をまるごと置き換えるか。前者のほうがdl_image_manager_config.pyの変更に強そうな気がしなくもないが？？
+　→　とりあえず対応。
 
 buildrcが設定されていないとエラーをはくようにすると親切だが、、、、
 
 SSDとResNet34の各タスクで一緒に学習結果をゲーム画像でテストした結果も学習タスクアウトプットに含まれると良い。
+　→  ResNet34の方はやった。SSDはテストプログラムが無いので、実施していない。
 
 学習タスクアウトプットの表示と削除
 -----------------------------------------------
@@ -299,6 +303,47 @@ GAA経由で動作する場合はlatest_weight.pthを参照して動作する必
 
 3. SSDとResNet34で対象とするprojectを変えたい。例えば、SSDではja_charを必要とするし、ResNet34ではやっぱり必要としない(このようなことが今後発生するか不明だけど・・・）、この場合は、create_task.shで実行したいタスクを選択出来るようにしたら良い。(SSDはこっちのprojectsでResNet34はこっちのprojects)など。なので、create_task.shで種別-どのprojectsディレクトリの関連を設定するファイルが必要。それを見て動作。また、dl_image_manager配下にはデフォルトでprojectsディレクトリがあり、こちらがすべてのタスクで使用される仕様のため、例えば、SSD_projectsというディレクトリがあり、こちらがSSD専用のprojectsにしたければ、そちらを指定した設定ファイルを作っておく必要がある。など。
 
+番外編
+========
+
+メモ:paramiko関連でハマる
+----------------------------------
+
+paramikoをインストールした。::
+
+  a@dataaug:~/gaa_lib/net$ pip install paramiko
+  Collecting paramiko
+    Downloading paramiko-3.0.0-py3-none-any.whl (210 kB)
+       |████████████████████████████████| 210 kB 15.5 MB/s 
+  Collecting cryptography>=3.3
+    Downloading cryptography-39.0.0-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (4.2 MB)
+       |████████████████████████████████| 4.2 MB 77.7 MB/s 
+  Collecting bcrypt>=3.2
+    Downloading bcrypt-4.0.1-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (593 kB)
+       |████████████████████████████████| 593 kB 88.1 MB/s 
+  Collecting pynacl>=1.5
+    Downloading PyNaCl-1.5.0-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_24_x86_64.whl (856 kB)
+       |████████████████████████████████| 856 kB 115.0 MB/s 
+  Requirement already satisfied: cffi>=1.12 in /home/a/.local/lib/python3.8/site-packages (from cryptography>=3.3->paramiko) (1.15.1)
+  Requirement already satisfied: pycparser in /home/a/.local/lib/python3.8/site-packages (from cffi>=1.12->cryptography>=3.3->paramiko) (2.21)
+  Installing collected packages: cryptography, bcrypt, pynacl, paramiko
+  Successfully installed bcrypt-4.0.1 cryptography-39.0.0 paramiko-3.0.0 pynacl-1.5.0
+  a@dataaug:~/gaa_lib/net$ 
+  
+あとで、pip叩いたら、::
+
+  module 'lib' has no attribute 'X509_V_FLAG_CB_ISSUER_CHECK'
+
+こまった。::
+
+　　https://askubuntu.com/questions/1428181/module-lib-has-no-attribute-x509-v-flag-cb-issuer-check/1433089#1433089
+
+以下実施した。解決した。::
+
+  sudo apt remove python3-pip 
+  wget https://bootstrap.pypa.io/get-pip.py
+  sudo python3 get-pip.py
+  
 
 
 

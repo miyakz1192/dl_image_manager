@@ -15,6 +15,8 @@ elif [ ${type} == "ssd" ]; then
 	cp config/dl_image_manager_config_ssd.py lib/dl_image_manager_config.py
 fi
 
+./change_projects.sh ${type}
+
 ./bin/clear_project.sh
 ./bin/build_all.py
 ./bin/build_data_set.py

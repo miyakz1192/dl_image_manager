@@ -103,6 +103,9 @@ ROOT-PROJECT NAME
    
 4. pytorchサーバでprojectミックスさせたものを展開する(人間、@pytorch)
 
+
+最後に作ったprojectをprojects_storeに格納する。全アルゴリズムに共通ならば、common。固有であれば、各アルゴリズムの名前のディレクトリに格納する。
+
 設定
 ------
 
@@ -143,11 +146,24 @@ build_all.pyおよびbuild_data_setを実行する。::
           <xxx.py>
         jupyer_notebook
           <~.ipynb>
-  
+   
+   projects_store
+     common
+       <project_name>
+       ...
+     resnet34
+       <project_name>
+       ...
+     ssd
+       <project_name>
+       ...
 
 "<>"でくくららた所が可変部分。
 ここで、<project_name>には具体的なプロジェクト名が入る。README.mdは任意。
 build配下のxは0以上の正の整数。
+
+projects_storeは各アルゴリズムごとにprojectsを分けたもの。利用するアルゴリズムに応じて、projects_store/<algo>/* を projectsにコピーして使う。なお、事前にprojects/配下を全部削除しておいたほうが良い。
+
 
 特殊なproject(ja_char)
 ============================

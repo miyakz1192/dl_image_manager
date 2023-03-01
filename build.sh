@@ -19,4 +19,5 @@ fi
 
 ./bin/clear_project.sh
 ./bin/build_all.py
+./bin/merge_project.py
 ./bin/build_data_set.py

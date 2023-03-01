@@ -64,6 +64,9 @@ class ProjectMerger:
             self.__transform_and_copy_annotation_file(target_prj, i, next_count + i)
             self.__copy_jpg_file(target_prj,i, next_count + i)
 
+        print("INFO: removing %s" % (self.projects_dir + "/" + target_prj))
+        shutil.rmtree(self.projects_dir + "/" + target_prj)
+
         return next_count + target_prj_jpg_file_count
 
     def merge(self):

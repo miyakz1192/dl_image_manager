@@ -7,6 +7,7 @@ import glob
 import shutil
 
 from get_current_process_user_home_dir import *
+from dl_image_manager_config import *
 from dl_image_manager_constants import *
 from xml_lib import * 
 
@@ -18,10 +19,6 @@ class ProjectMerger:
 
     def __count_jpg_files(self, dir_name):
         return len(glob.glob(dir_name + "/*.jpg"))
-
-    def load_config(self, file_name=None):
-        #load configuration of src_prj and dst_prj from files
-        pass
 
     def __prj_build_dir_name(self,project_name):
         return self.projects_dir + "/" + project_name + "/build"
@@ -67,7 +64,7 @@ class ProjectMerger:
             self.__transform_and_copy_annotation_file(target_prj, i, next_count + i)
             self.__copy_jpg_file(target_prj,i, next_count + i)
 
-        return next_count
+        return next_count + target_prj_jpg_file_count
 
     def merge(self):
         self.dst_prj_jpg_file_count = self.__count_jpg_files(self.projects_dir + "/" + self.dst_prj + "/build")
@@ -79,5 +76,13 @@ class ProjectMerger:
             next_count = self.__merge_one_prj(target_prj, next_count)
 
 if __name__ == "__main__":
-    pm = ProjectMerger(src_prj=["closebcow"], dst_prj="close", projects_dir="./projects")
-    pm.merge()
+    if "DL_IMAGE_MANAGER_MERGE_CONFIG" in globals():
+        print("INFO: start merge")
+        src_prj = DL_IMAGE_MANAGER_MERGE_CONFIG[0]
+        dst_prj = DL_IMAGE_MANAGER_MERGE_CONFIG[1]
+        projects_dir = DL_IMAGE_MANAGER_MERGE_CONFIG[2]
+        pm = ProjectMerger(src_prj=src_prj, dst_prj=dst_prj, projects_dir=projects_dir)
+        pm.merge()
+        print("INFO: end merge")
+    else:
+        print("INFO: no DL_IMAGE_MANAGER_MERGE_CONFIG quit this program")

@@ -17,6 +17,8 @@ DL_IMAGE_MANAGER_PROJECTS = "/dl_image_manager/projects/"
 DL_IMAGE_MANAGER_BIN = "/dl_image_manager/bin/" 
 DL_IMAGE_MANAGER_SAMPLE = "/dl_image_manager/sample/" 
 
+DL_IMAGE_MANAGER_SAMPLE_MASTER_XML = "/dl_image_manager/sample/image_extended.xml"
+
 DL_IMAGE_MANAGER_BUILD_PROJECT_BIN = "/dl_image_manager/bin/build_project.py" 
 
 DL_IMAGE_MANAGER_MAKE_PROJECT_BIN = DL_IMAGE_MANAGER_BIN + "make_project.sh"

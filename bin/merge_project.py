@@ -5,17 +5,29 @@ sys.path.append("./lib/")
 
 import glob
 import shutil
+import argparse
 
 from get_current_process_user_home_dir import *
 from dl_image_manager_config import *
 from dl_image_manager_constants import *
 from xml_lib import * 
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--additional_src_txt", help="additional src projects in text file", type=str)
+args = parser.parse_args()
+
 class ProjectMerger:
-    def __init__(self, src_prj=None, dst_prj=None, projects_dir=None):
+    def __init__(self, src_prj=None, dst_prj=None, projects_dir=None, additional_src_txt=None):
         self.src_prj = src_prj
         self.dst_prj = dst_prj
         self.projects_dir = projects_dir
+
+        if additional_src_txt is not None:
+            temp = []
+            with open(additional_src_txt) as f:
+                temp = list(map(lambda x: x.rstrip(), f.readlines()))
+
+            self.src_prj += temp
 
     def __count_jpg_files(self, dir_name):
         return len(glob.glob(dir_name + "/*.jpg"))
@@ -84,7 +96,9 @@ if __name__ == "__main__":
         src_prj = DL_IMAGE_MANAGER_MERGE_CONFIG[0]
         dst_prj = DL_IMAGE_MANAGER_MERGE_CONFIG[1]
         projects_dir = DL_IMAGE_MANAGER_MERGE_CONFIG[2]
-        pm = ProjectMerger(src_prj=src_prj, dst_prj=dst_prj, projects_dir=projects_dir)
+        import pdb
+        pdb.set_trace()
+        pm = ProjectMerger(src_prj=src_prj, dst_prj=dst_prj, projects_dir=projects_dir, additional_src_txt=args.additional_src_txt)
         pm.merge()
         print("INFO: end merge")
     else:

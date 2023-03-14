@@ -23,6 +23,12 @@ DL_IMAGE_MANAGER_BUILD_PROJECT_BIN = "/dl_image_manager/bin/build_project.py"
 
 DL_IMAGE_MANAGER_MAKE_PROJECT_BIN = DL_IMAGE_MANAGER_BIN + "make_project.sh"
 
+DL_IMAGE_MANAGER_CONFIG_DIR = "/dl_image_manager/config/"
+
+DL_IMAGE_MANAGER_ADDITIONAL_MERGE_TARGET_SRC_PRJ_FILE_NAME = "additional_merge_target_src_prj.txt"
+
+DL_IMAGE_MANAGER_PROJECTS_STORE_COMMON = "/dl_image_manager/projects_store/common/"
+
 
 #############################
 # ja_char_gen 

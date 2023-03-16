@@ -29,6 +29,8 @@ DL_IMAGE_MANAGER_ADDITIONAL_MERGE_TARGET_SRC_PRJ_FILE_NAME = "additional_merge_t
 
 DL_IMAGE_MANAGER_PROJECTS_STORE_COMMON = "/dl_image_manager/projects_store/common/"
 
+DL_IMAGE_MANAGER_PROJECTS_STORE_COMMON_MASTER_IMAGE_SEARCH_PATTERN = "/dl_image_manager/projects_store/common/*/master/image.jpg"
+
 
 #############################
 # ja_char_gen 
